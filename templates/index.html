@@ -1,0 +1,32 @@
+<!doctype html5>
+<html>
+    <head>
+    <script>
+        // Minified microAjax library from <https://code.google.com/p/microajax/>
+        function microAjax(B,A){this.bindFunction=function(E,D){return function(){return E.apply(D,[D])}};this.stateChange=function(D){if(this.request.readyState==4){this.callbackFunction(this.request.responseText)}};this.getRequest=function(){if(window.ActiveXObject){return new ActiveXObject("Microsoft.XMLHTTP")}else{if(window.XMLHttpRequest){return new XMLHttpRequest()}}return false};this.postBody=(arguments[2]||"");this.callbackFunction=A;this.url=B;this.request=this.getRequest();if(this.request){var C=this.request;C.onreadystatechange=this.bindFunction(this.stateChange,this);if(this.postBody!==""){C.open("POST",B,true);C.setRequestHeader("X-Requested-With","XMLHttpRequest");C.setRequestHeader("Content-type","application/x-www-form-urlencoded");C.setRequestHeader("Connection","close")}else{C.open("GET",B,true)}C.send(this.postBody)}};
+
+        function send_magic_packet() {
+            microAjax('/magic-packet', function(result) {
+                document.getElementById('wol_result').innerHTML = JSON.parse(result).status == 'success' ? '✓' : '✗';
+            }, 'mac=' + document.getElementById('wol_address').value);
+        }
+
+        function send_ping() {
+            microAjax('/ping/' + document.getElementById('ping_address').value, function(result) {
+                document.getElementById('ping_result').innerHTML = JSON.parse(result).status == 'up' ? '✓' : '✗';
+            });
+        }
+    </script>
+    <body>
+        <p>
+            <input id="wol_address" placeholder="Destination MAC">
+            <button onClick="send_magic_packet()">Send magic packet</button>
+            <span id="wol_result"></span>
+        </p>
+        <p>
+            <input id="ping_address" placeholder="Destination address">
+            <button onClick="send_ping()">Ping</button>
+            <span id="ping_result"></span>
+        </p>
+    </body>
+</html>
