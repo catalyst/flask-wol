@@ -1,2 +1,4 @@
 # flask-wol
-Tiny Flask application to send Wake-on-LAN packets
+Tiny Flask web application to send Wake-on-LAN packets
+
+Requires: fping, flask, netaddr
