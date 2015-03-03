@@ -66,7 +66,7 @@ def ping(address=None):
     """
 
     try:
-        return jsonify(status='up' if send_ping(address) else 'down')
+        return jsonify(status='up' if send_ping(socket.gethostbyname(address)) else 'down')
     except:
         return jsonify(status='error')
 
